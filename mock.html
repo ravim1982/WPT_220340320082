@@ -1,0 +1,106 @@
+<html>
+<body>
+
+<form action="poc2" method="get">
+<Br/>bookid:<input type="text" id="id"/>
+<span id="msg">what will happen</span>
+<Br/>bookname:<input type="text" id="name"/>
+<Br/>price:<input type="text" id="price"/>
+
+
+</form>
+
+
+
+<button id="update">update</button>
+
+
+</body>
+
+<script src="jquery-3.5.1.min.js"></script>
+<script>//our scrip will come here 
+
+
+
+$(document).ready(function()
+{
+   console.log("dom content loaded");
+
+   $("#id").blur(function () 
+	{   console.log("id blur event oocur");
+		
+	    let input={bookid:$('#id').val()}
+		let para={
+        data:input,
+		url:'http://localhost:8081/getid',
+        type:'get',
+		datatype:'json',
+		success:(datagot) =>{
+          
+			if(datagot.status===true){
+            console.log("we got it through blur event!!");
+			$('#name').val(datagot.detail.bookname);
+            $('#price').val(datagot.detail.price);
+		    $('#msg').text("we got details");
+		
+		   }
+          else {
+			$('#name').val("");
+            $('#price').val("");
+		    $('#msg').text("sorry  details not found");
+            }
+		 },
+          error:(someerroroccurs) =>{
+			console.log("error happen please check again"+someerroroccurs);
+		  }
+
+		}
+	 
+	
+	     $.ajax(para);
+	
+	
+	});
+	
+	$("#update").click(function () 
+	{   console.log("button clicked");
+		
+	    let input={bookid:$('#id').val(),bookname:$('#name').val(),price:$('#price').val()}
+		let para={
+        data:input,
+		url:'http://localhost:8081/update',
+        type:'get',
+		datatype:'json',
+		success:(datagot) =>{
+          if(datagot.status===true){
+            console.log("we got it update!!");
+			
+		    $('#msg').text("updated sucessfully !!");
+		
+		   }
+          else {
+			    console.log("we not get any update!!");
+		        $('#msg').text("sorry not able to update");
+            }
+		 },
+          error:(someerroroccurs) =>{
+			console.log("error happen please check again"+someerroroccurs);
+		  }
+
+		}
+	 
+	
+	     $.ajax(para);
+	
+	
+	});
+
+
+
+});
+
+
+</script>
+
+
+</html>
